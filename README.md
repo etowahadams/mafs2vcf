@@ -8,7 +8,7 @@ mafs2vcf is a Python command line interface for converting
 ```
 $ git clone https://github.com/etowahs/mafs2vcf.git
 $ cd mafs2vcf
-$ pip install .
+$ pip3 install .
 $ mafs2vcf --help
 ```
 
