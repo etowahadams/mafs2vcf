@@ -117,13 +117,10 @@ class MafsConverter:
         # use ComparableLine as a wrapper for the the object that process_line() returns so that priority can be
         # assigned based on chromosome position and name
         if tar:
-            print(self.process_line(div, 'divergent'))
             self.pq.put(ComparableLine(self.process_line(tar, 'target')))
         if div:
-            print(self.process_line(div, 'divergent'))
             self.pq.put(ComparableLine(self.process_line(div, 'divergent')))
         if anc:
-            print(self.process_line(div, 'divergent'))
             self.pq.put(ComparableLine(self.process_line(anc, 'ancestral')))
 
     def get_next_line(self, file, default):
@@ -134,8 +131,6 @@ class MafsConverter:
                 next_line = next(file, default)
             elif len(cols) < 6:
                 next_line = None
-        else:
-            print("none", file)
         return next_line
 
     def convert_to_VCF_anc(self, output_filename):
