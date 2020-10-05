@@ -1,4 +1,6 @@
 from queue import PriorityQueue
+import subprocess
+import os
 from mafs2vcf.constants import constants as c
 from mafs2vcf.comparable_line.comparable_line import ComparableLine
 
@@ -19,26 +21,46 @@ class MafsConverter:
         self.div_filename = div_filename
         self.anc_filename = anc_filename
         self.pq = PriorityQueue()
-
+        
+        
+        print(self.target_filename)
+        pwd = f'bash {os.path.dirname(os.path.realpath(__file__))}/sort.sh {self.target_filename}  temp-{self.target_filename}'
+        subprocess.call(pwd, shell=True)
         # open files
         try:
-            self.target_file = open(target_filename, 'r')
+            f = open(self.target_filename, 'r')
+            f.close()
+            self.target_file = open(self._gen_temp_files(self.target_filename))
         except IOError:
             print("Target file could not be opened")
 
         try:
-            self.div_file = open(div_filename, 'r')
+            f = open(self.div_filename, 'r')
+            f.close()
+            self.div_file = open(self._gen_temp_files(self.div_filename))
         except IOError:
             print("Divergent file could not be opened")
 
         if anc_filename:
             try:
-                self.anc_file = open(anc_filename, 'r')
+                f = open(self.anc_filename, 'r')
+                f.close()
+                self.anc_file = open(self._gen_temp_files(self.anc_filename))
             except IOError:
                 print("Ancestral file could not be opened")
         else:
             self.anc_file = None;
-
+    
+    def _gen_temp_files(self, filename):
+        print("Generating sorted temp file for", filename);
+        command = f'bash {os.path.dirname(os.path.realpath(__file__))}/sort.sh {filename}  sorted-{filename}'
+        ret = subprocess.call(command, shell=True)
+        
+        if (ret == 0):
+            return f'sorted-{filename}'
+        else:
+            return None
+        
     @staticmethod
     def process_line(line, line_source="target"):
         """
@@ -106,9 +128,10 @@ class MafsConverter:
         """
         Initialize the priority queue with values from the files
         """
-        for file in [self.target_file, self.div_file, self.anc_file]:
-            if file:
-                next(file)
+        # neccecary if header is in file, but header is auto removed before sorting
+        # for file in [self.target_file, self.div_file, self.anc_file]:
+        #     if file:
+        #         next(file)
 
         tar = next(self.target_file, None)
         div = next(self.div_file, None)
@@ -205,7 +228,10 @@ if __name__ == "__main__":
     #                    'C:/Users/selua/PycharmProjects/PyMAFS/data/test2.mafs',
     #                    'C:/Users/selua/PycharmProjects/PyMAFS/data/test1.mafs')
 
-    M1 = MafsConverter('C:/Users/selua/PycharmProjects/PyMAFS/data/HMS_MMS_poly_all.mafs',
-                       'C:/Users/selua/PycharmProjects/PyMAFS/data/WED_poly_all.mafs',
-                       'C:/Users/selua/PycharmProjects/PyMAFS/data/HG_poly_all.mafs')
-    M1.convert_to_VCF_anc('output.vcf')
+    # M1 = MafsConverter('C:/Users/selua/PycharmProjects/PyMAFS/data/HMS_MMS_poly_all.mafs',
+    #                   'C:/Users/selua/PycharmProjects/PyMAFS/data/WED_poly_all.mafs',
+    #                   'C:/Users/selua/PycharmProjects/PyMAFS/data/HG_poly_all.mafs')
+    # M1.convert_to_VCF_anc('output.vcf')
+    sort = "bash ../sort/sort.sh C:/Users/selua/PycharmProjects/PyMAFS/data/test1.mafs"
+    pwd = f'bash {os.path.dirname(os.path.realpath(__file__))}/sort.sh /home/ubuntu/environment/mafs2vcf/test.mafs  /home/ubuntu/environment/mafs2vcf/out.mafs'
+    subprocess.call(pwd, shell=True)
