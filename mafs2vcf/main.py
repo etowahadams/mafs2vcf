@@ -228,10 +228,10 @@ if __name__ == "__main__":
     #                    'C:/Users/selua/PycharmProjects/PyMAFS/data/test2.mafs',
     #                    'C:/Users/selua/PycharmProjects/PyMAFS/data/test1.mafs')
 
-    # M1 = MafsConverter('C:/Users/selua/PycharmProjects/PyMAFS/data/HMS_MMS_poly_all.mafs',
-    #                   'C:/Users/selua/PycharmProjects/PyMAFS/data/WED_poly_all.mafs',
-    #                   'C:/Users/selua/PycharmProjects/PyMAFS/data/HG_poly_all.mafs')
-    # M1.convert_to_VCF_anc('output.vcf')
-    sort = "bash ../sort/sort.sh C:/Users/selua/PycharmProjects/PyMAFS/data/test1.mafs"
-    pwd = f'bash {os.path.dirname(os.path.realpath(__file__))}/sort.sh /home/ubuntu/environment/mafs2vcf/test.mafs  /home/ubuntu/environment/mafs2vcf/out.mafs'
-    subprocess.call(pwd, shell=True)
+    M1 = MafsConverter('C:/Users/selua/PycharmProjects/PyMAFS/data/HMS_MMS_poly_all.mafs',
+                      'C:/Users/selua/PycharmProjects/PyMAFS/data/WED_poly_all.mafs',
+                      'C:/Users/selua/PycharmProjects/PyMAFS/data/HG_poly_all.mafs')
+    M1.convert_to_VCF_anc('output.vcf')
+    # sort = "bash ../sort/sort.sh C:/Users/selua/PycharmProjects/PyMAFS/data/test1.mafs"
+    # pwd = f'bash {os.path.dirname(os.path.realpath(__file__))}/sort.sh /home/ubuntu/environment/mafs2vcf/test.mafs  /home/ubuntu/environment/mafs2vcf/out.mafs'
+    # subprocess.call(pwd, shell=True)
