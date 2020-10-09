@@ -22,10 +22,6 @@ class MafsConverter:
         self.anc_filename = anc_filename
         self.pq = PriorityQueue()
         
-        
-        print(self.target_filename)
-        pwd = f'bash {os.path.dirname(os.path.realpath(__file__))}/sort.sh {self.target_filename}  temp-{self.target_filename}'
-        subprocess.call(pwd, shell=True)
         # open files
         try:
             f = open(self.target_filename, 'r')
@@ -52,12 +48,15 @@ class MafsConverter:
             self.anc_file = None;
     
     def _gen_temp_files(self, filename):
-        print("Generating sorted temp file for", filename);
-        command = f'bash {os.path.dirname(os.path.realpath(__file__))}/sort.sh {filename}  sorted-{filename}'
+        print("Generating sorted temp file for", filename, "...");
+        path = os.getcwd()
+        print(path)
+        
+        command = f'bash {os.path.dirname(os.path.realpath(__file__))}/sort.sh {filename}  {os.path.dirname(filename)}/sorted-{os.path.basename(filename)} '
         ret = subprocess.call(command, shell=True)
         
         if (ret == 0):
-            return f'sorted-{filename}'
+            return f'{os.path.dirname(filename)}/sorted-{os.path.basename(filename)}'
         else:
             return None
         
