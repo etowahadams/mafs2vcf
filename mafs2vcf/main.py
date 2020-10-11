@@ -50,13 +50,17 @@ class MafsConverter:
     def _gen_temp_files(self, filename):
         print("Generating sorted temp file for", filename, "...");
         path = os.getcwd()
-        print(path)
         
-        command = f'bash {os.path.dirname(os.path.realpath(__file__))}/sort.sh {filename}  {os.path.dirname(filename)}/sorted-{os.path.basename(filename)} '
+        if (len(os.path.dirname(filename)) > 0):
+            gen_filename = f'{os.path.dirname(filename)}/sorted-{os.path.basename(filename)}'
+        else:
+            gen_filename = f'sorted-{os.path.basename(filename)}'
+        
+        command = f'bash {os.path.dirname(os.path.realpath(__file__))}/sort.sh {filename} {gen_filename} '
         ret = subprocess.call(command, shell=True)
         
         if (ret == 0):
-            return f'{os.path.dirname(filename)}/sorted-{os.path.basename(filename)}'
+            return gen_filename
         else:
             return None
         
